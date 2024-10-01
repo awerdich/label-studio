@@ -3,6 +3,7 @@ services:
   nginx:
     build: .
     image: heartexlabs/label-studio:latest
+    container_name: label_studio_ngx
     restart: unless-stopped
     ports:
       - "7485:8085"
@@ -28,6 +29,7 @@ services:
     tty: true
     build: .
     image: heartexlabs/label-studio:latest
+    container_name: label_studio_app
     restart: unless-stopped
     expose:
       - "8000"
@@ -42,6 +44,7 @@ services:
 
   db:
     image: pgautoupgrade/pgautoupgrade:13-alpine
+    container_name: label_studio_db
     hostname: db
     restart: unless-stopped
     # Optional: Enable TLS on PostgreSQL
