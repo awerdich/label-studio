@@ -8,6 +8,8 @@ services:
       - "8081:8086"
     depends_on:
       - app
+    networks:
+      - label-studio-network
     environment:
       - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-}
     #   Optional: Set nginx error log level (default: warn)
@@ -17,8 +19,10 @@ services:
     #   Just drop your cert.pem and cert.key into folder 'deploy/nginx/certs'
     #      - NGINX_SSL_CERT=/certs/cert.pem
     #      - NGINX_SSL_CERT_KEY=/certs/cert.key
+    env_file:
+      - ./env
     volumes:
-      - "$DATA_DIR:/label-studio/data:rw"
+      - ${DATA_DIR}:/label-studio/data:rw
       - ./deploy/nginx/certs:/certs:ro
     #   Optional: Override nginx default conf
     #      - ./deploy/my.conf:/etc/nginx/nginx.conf
@@ -34,8 +38,10 @@ services:
       - "8000"
     depends_on:
       - db
+    networks:
+      - label-studio-network
     env_file:
-      - .env
+      - ./env
     environment:
       - DJANGO_DB=default
       - POSTGRE_NAME=postgres
@@ -47,13 +53,15 @@ services:
       - JSON_LOG=1
     #      - LOG_LEVEL=DEBUG
     volumes:
-      - "$DATA_DIR:/label-studio/data:rw"
+      - ${DATA_DIR}:/label-studio/data:rw
     command: label-studio-uwsgi
 
   db:
     image: pgautoupgrade/pgautoupgrade:17-alpine
     hostname: db
     restart: unless-stopped
+    networks:
+      - label-studio-network
     # Optional: Enable TLS on PostgreSQL
     # Just drop your server.crt and server.key into folder 'deploy/pgsql/certs'
     # NOTE: Both files must have permissions u=rw (0600) or less
@@ -61,10 +69,16 @@ services:
     #      -c ssl=on
     #      -c ssl_cert_file=/var/lib/postgresql/certs/server.crt
     #      -c ssl_key_file=/var/lib/postgresql/certs/server.key
+    env_file:
+      - ./env
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=postgres
-      - POSTGRES_DATA_DIR="${DATA_DIR}/postgres"
+      - POSTGRES_DATA_DIR=${DATA_DIR}/postgres
     volumes:
-      - "${DATA_DIR}/postgres:/var/lib/postgresql/data"
-      - "./deploy/pgsql/certs:/var/lib/postgresql/certs:ro"
+      - ${DATA_DIR}/postgres:/var/lib/postgresql/data
+      - ./deploy/pgsql/certs:/var/lib/postgresql/certs:ro"
+
+networks:
+  label-studio-network:
+    external: true
