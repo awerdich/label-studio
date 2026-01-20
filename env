@@ -1,2 +1,3 @@
-DATA_DIR="/home/andreas/data/label-studio-data"
-POSTGRES_DATA_DIR="/home/andreas/data/label-studio-data/postgres"
+DATA_DIR=/results/projects/hsdm/label_studio_data
+LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
+LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio/data
