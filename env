@@ -1,3 +1,4 @@
-DATA_DIR=/results/projects/hsdm/label_studio_data
+DATA_DIR=/results/projects/hsdm/label-studio-data
 LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
 LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio/data
+LABEL_STUDIO_DISABLE_SIGNUP_WITHOUT_LINK=false
