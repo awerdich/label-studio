@@ -137,6 +137,8 @@ When setting a reservation time, you should aim to allow a little above the max 
     
     Two annotators begin working on a task and it takes them both 15 minutes to complete, but your reservation time is 10 minutes. This means that after 10 minutes, another annotator can also begin working on that task - resulting in 3 annotations on the task rather than 2 (your minimum annotator overlap).
 
+    You can help avoid this by selecting **Enforce strict overlap** under [**Quality > Overlap of Annotations**](#overlap).
+
 </dd>
 
 <dt id="annotating-options">Annotation Options</dt>
@@ -563,6 +565,9 @@ Note that in certain situations, this may be exceeded. For example, if there are
 
 Also note that only annotations created by distinct users count towards the overlap. For example, if the overlap is `2` and a user creates and submits two annotations on a single task (which can be done in Quick View), the overlap threshold will not be reached until another user submits an annotation. 
 
+!!! note
+    Setting annotations per task above 20 may impact loading performance in the Data Manager.
+
 </td>
 </tr>
 <tr>
@@ -597,7 +602,23 @@ If you want half of the tasks to be annotated by at least 3 people:
 
 If your overlap enforcement is less than 100% (meaning that only some tasks require multiple annotators), then the tasks that *do* require multiple annotations are shown first. <br /><br />If your overlap is 100%, then this setting has no effect.
 
-Note that if enabled, this setting supersedes what you specified under [**Annotations > Task Ordering Method**](#task-ordering)
+Note that if enabled, this setting supersedes what you specified under [**Annotations > Task Ordering Method**](#task-ordering).
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Enforce strict overlap limit** 
+</td>
+<td>
+
+This setting strictly enforces your **Annotations per task** limit.<br /><br />If you do not enable this setting, you may see tasks where the number of annotations exceed your **Annotations per task** limit. This typically happens when you set a low [task reservation time](#lock-tasks), meaning that task locks expire before annotators submit their tasks. This allows other annotators to access and then submit the task, potentially resulting in an excess of annotations.<br /><br />
+
+When enabled, if an annotator tries to submit a task after the limit has been reached, they will receive an error message stating **Annotation Overlap Reached**. Their draft will be saved but they will be unable to submit. <br /><br />
+
+Note that enforcement only applies when the user submitting the annotation is in the Annotator role. All other roles are exempt. 
+
 
 </td>
 </tr>
@@ -696,9 +717,11 @@ Set this counter to zero if you want to skip onboarding and only use continuous 
 </td>
 <td>
 
-Annotators are presented with tasks in the order that is configured under [**Task Ordering Method**](#task-ordering). 
+Annotators are presented with ground truth tasks in the order that is configured under [**Task Ordering Method**](#task-ordering). 
 
-To have all ground truths presented as part of continuous evaluation, set the **Onboarding evaluation** counter to zero. You can also use a combination of both, so that annotators see a subset of ground truths immediately, and then are presented the remaining ground truths periodically as they progress through the project (depending on your task ordering method). 
+To have all ground truths presented as part of continuous evaluation, set the **Onboarding evaluation** counter to zero and set this number equal to the number of ground truth tasks in your project. 
+
+You can also use a combination of both, so that annotators see a subset of ground truths immediately, and then are presented the remaining ground truths periodically as they progress through the project (depending on your task ordering method). 
 
 </td>
 </tr>
@@ -760,7 +783,7 @@ For more information about pausing annotators, including how to manually pause s
 
 </dd>
 
-<dt id="task-agreement">Agreement</dt>
+<dt id="task-agreement">Agreement <span class="badge"></span></dt>
 
 <dd>
 
@@ -768,7 +791,10 @@ When multiple annotators are labeling a task, the task agreement reflects how mu
 
 For example, if 10 annotators review a task and only 2 select the same choice, then that task would have a low agreement score.  
 
-You can customize how task agreement is calculated and how it should affect the project workflow. For more information, see [Task agreement and how it is calculated](stats). 
+You can customize how task agreement is calculated and how it should affect the project workflow. For more information, see [Task agreement](stats). 
+
+!!! error Enterprise
+    Label Studio Starter Cloud only supports the **Pairwise** methodology. Each control tag uses the [default built-in metric](agreement_metrics#Default-metric-reference) for agreement calculation.
 
 <table>
 <thead>
@@ -780,20 +806,90 @@ You can customize how task agreement is calculated and how it should affect the 
 <tr>
 <td>
 
-**Agreement metric**
+**Methodology**
+
 </td>
 <td>
 
-Select the [metric](stats#Available-agreement-metrics) that should determine task agreement.
+Methodology to use for calculating task agreement. 
+
+* **Consensus**: Consensus measures *"What percentage of annotators chose the most common answer?"*
+* **Pairwise**: Pairwise measures *"What is the average agreement score across all pairs of annotators?"*
+
+For more information, see [Task agreement - methodology](stats#Methodology).
 
 </td>
 </tr>
 <tr>
 <td>
 
+**Built-in Metrics vs Custom**
+
+</td>
+<td>
+
+Select whether you want to use the built-in metrics or custom metrics for agreement.
+
+For more information, see [Built-in agreement metrics reference](agreement_metrics) and [Custom agreement metrics](custom_metric).
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Overall Agreement**
+
+</td>
+<td>
+
+Configure how overall agreement is calculated by setting the weight for each control tag.
+
+For more information, see [Configure weight for the overall agreement](stats#Configure-weight-for-the-overall-agreement).
+
+
+</td>
+</tr>
+<tr>
+<td>
+
+**Agreement Columns**
+
+</td>
+<td>
+
+Configure how agreement is calculated for each control tag.
+
+For more information, see [Configure agreement for each control tag](stats#Configure-agreement-for-each-control-tag).
+
+</td>
+</tr>
+</table>
+
+</dd>
+
+<dt id="low-agreement">Low Agreement Resolution <span class="badge"></span></dt>
+
+<dd>
+
+!!! note
+    Low agreement resolution settings are only available when the project is configured to [automatically assign tasks](#distribute-tasks). If you are using Manual distribution, this section will not appear in your project settings.
+    
+    If you switch a project from Automatic to Manual distribution, low agreement resolution is automatically disabled.
+
+Resolve tasks with low agreement scores by automatically assigning additional annotators to the task. 
+
+<table>
+<thead>
+    <tr>
+      <th>Field</th>
+      <th>Description</th>
+    </tr>
+</thead>
+<tr>
+<td>
+
 **Assign additional annotator**
 
-<span class="badge"></span>
 </td>
 <td>
 Enable this option to automatically assign an additional annotator to any tasks that have a low agreement score. 
@@ -809,7 +905,6 @@ Note that to see this setting, the project must be set up with [automatic task a
 
 **Agreement threshold**
 
-<span class="badge"></span>
 </td>
 <td>
 
@@ -822,7 +917,6 @@ Enter the agreement score that a task must meet before it can be considered comp
 
 **Maximum additional annotators**
 
-<span class="badge"></span>
 </td>
 <td>
 
@@ -836,16 +930,6 @@ Annotators are assigned one at a time until the agreement threshold is achieved.
 
 !!! note
     When configuring **Maximum additional annotators**, be mindful of the number of annotators available in your project. If you have fewer annotators available than the sum of [**Annotations per task**](#overlap) + **Maximum additional annotators**, you might encounter a scenario in which a task with a low agreement score cannot be marked complete.
-
-</dd>
-
-<dt>Custom weights</dt>
-
-<dd>
-
-Set custom weights for tags and labels to change the agreement calculation. The options you are given are automatically generated from your labeling interface setup. 
-
-Weights set to zero are ignored from calculation.
 
 </dd>
 </dl>

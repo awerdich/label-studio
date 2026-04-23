@@ -38,13 +38,19 @@ Label Studio is available to everyone as open source software (Label Studio Comm
   <tr>
     <td><b>Role-based workflows</b><br/><a href="https://docs.humansignal.com/guide/project_settings_lse#Annotation">Role-based automated workflows for annotators and reviewers.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">Limited</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>
     <td><b>Role-based access control</b><br/><a href="https://docs.humansignal.com/guide/admin_roles">Role-based access control into workspaces and projects: Admin, Manager, Reviewer, and Annotator.</a></td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">✅</td>
+  </tr>
+  <tr>
+    <td><b>Customizable permissions</b><br/><a href="https://docs.humansignal.com/guide/admin_permissions">Fine-grained control over which roles can execute specific actions, such as inviting members, managing cloud storage, deleting tasks, and more.</a></td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>
@@ -146,7 +152,7 @@ Label Studio is available to everyone as open source software (Label Studio Comm
   <tr>
     <td><b>Project-level user settings</b><br/><a href="https://docs.humansignal.com/guide/project_settings_lse#Annotation">Multiple configuration options for how Annotators and Reviewers interact with tasks and what information they can see.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">Limited</td>
     <td style="text-align:center">✅</td>
   </tr>
 
@@ -216,19 +222,19 @@ Label Studio is available to everyone as open source software (Label Studio Comm
    <tr>
     <td><b>Automated pre-labeling</b><br/><a href="https://docs.humansignal.com/guide/prompts_overview">Rapidly pre-label tasks using LLMs.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">❌</td>
+    <td style="text-align:center">Limited Trial</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>
     <td><b>LLM fine-tuning and evaluation</b><br/><a href="https://docs.humansignal.com/guide/prompts_draft">Evaluate and fine-tune LLM prompts against a ground truth dataset.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">❌</td>
+    <td style="text-align:center">Limited Trial</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>
     <td><b>Run benchmarks</b><br/><a href="https://docs.humansignal.com/guide/prompts_draft#Evaluation-results">Compare model outputs against ground truth or rubric criteria.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">❌</td>
+    <td style="text-align:center">Limited Trial</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>
@@ -297,7 +303,7 @@ Label Studio is available to everyone as open source software (Label Studio Comm
   <tr>
     <td><b>Agreement metrics</b><br/><a href="https://docs.humansignal.com/guide/stats.html">Define how annotator consensus is calculated using pre-defined agreement metrics.</a></td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">Limited</td>
     <td style="text-align:center">✅</td>
   </tr>
   <tr>

@@ -27,7 +27,8 @@ The organization Owner or Administrator for Label Studio Enterprise can set up S
 - [Google SAML](google_saml.html)
 - [Ping Federate and Ping Identity SAML SSO Setup Example](pingone.html)
 - OneLogin
-- Microsoft Active Directory
+- Microsoft Entra ID (formerly Azure Active Directory, Azure AD)
+- Auth0
 - Others that use SAML assertions
 
 After setting up the SSO, you can use native authentication to access the Label Studio UI, however it's not a recommended option especially for the user with the Owner role.
@@ -42,11 +43,9 @@ Set up Label Studio Enterprise as a Service Provider (SP) with your Identity Pro
 
 The details will vary depending on your IdP, but in general you will complete the following steps:
 
-###### From Label Studio:
+#### From Label Studio:
 
-1. Click the menu in the upper left and select **Organization**. 
-
-    ![Screenshot of Organization in the Label Studio menu](/images/general/menu_organization.png)
+1. Go to the **Organization** page. 
     
     If you do not see the option to select **Organization**, you are not logged in with the appropriate role. 
 2. Select **SSO & SAML** in the upper right. 
@@ -57,22 +56,49 @@ The details will vary depending on your IdP, but in general you will complete th
     * **Login URL**---This is the URL that users will use to log in to Label Studio. 
     * **Logout URL**---This is the URL used to redirect users after successfully logging out of Label Studio.
 
-###### From your IdP:
+#### From your IdP:
 
 1. Paste the URLs copied from Label Studio in the appropriate location. 
 2. Generate a metadata XML file, or a URL that specifies the metadata for the IdP.
 3. Set up or confirm setup of the following SAML attributes. Label Studio Enterprise expects specific attribute mappings for user identities.
 
-    | Data | Required Attribute |
-    | --- | --- |
-    | Email address | Email |
-    | First or given name | FirstName |
-    | Last or family name | LastName |
-    | Group name | Groups | 
+**The default attribute names are:**
+
+| Data | Default Attribute |
+| --- | --- |
+| Email address | Email |
+| First or given name | FirstName |
+| Last or family name | LastName |
+| Group name | Groups | 
+
+!!! note Note
+    Different Identity Providers use different attribute names. Label Studio provides **presets** in the SSO & SAML settings page to quickly configure the correct attribute mappings for popular IdPs. You can also manually configure custom attribute names if your IdP uses different values.
+
+**Attribute presets by IdP:**
+
+| IdP | Email | FirstName | LastName | Groups |
+| --- | --- | --- | --- | --- |
+| Default | `Email` | `FirstName` | `LastName` | `Groups` |
+| Auth0 | `email` | `given_name` | `family_name` | `groups` |
+| Entra ID (short) | `emailAddress` | `givenName` | `surname` | `groups` |
+| Google | `Email` | `FirstName` | `LastName` | `Groups` |
+| PingOne | `emailAddress` | `givenName` | `surname` | `Groups` |
+| Okta | `email` | `firstName` | `lastName` | `groups` |
+
+**Microsoft Entra ID with full URI format:**
+
+If your Entra ID is configured with default claim URIs, use:
+
+| Attribute | URI |
+| --- | --- |
+| Email | `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress` |
+| FirstName | `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname` |
+| LastName | `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname` |
+| Groups | `http://schemas.microsoft.com/ws/2008/06/identity/claims/groups` |
 
 
 
-###### From Label Studio:
+#### From Label Studio:
 
 1. Return to the SSO & SAML page. 
 2. Upload the metadata XML file or specify the metadata URL.  
@@ -118,4 +144,6 @@ Setting these options disables the Label Studio API and UI options to assign rol
     
     If requested, we can also disable the common login option for your organization. When disabled, users can only use the SSO login fields and the common login  option is disabled completely. 
 
+### Login page URL
 
+You can also set the `LOGIN_PAGE_URL` environment variable to redirect the login page to the specified URL.   
